@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.View
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.net.URLEncoder
+import android.view.WindowManager
 
 class MainActivity : AppCompatActivity() {
     
@@ -70,6 +73,28 @@ class MainActivity : AppCompatActivity() {
             mediaPlaybackRequiresUserGesture = false
             useWideViewPort = true
             loadWithOverviewMode = true
+        }
+
+        // ✅ WEBCHROMECLIENT - TELJES KÉPERNYŐS VIDEÓHOZ
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                super.onShowCustomView(view, callback)
+                // Teljes képernyős mód aktiválása
+                if (view is FrameLayout) {
+                    window.setFlags(
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    )
+                    supportActionBar?.hide()
+                }
+            }
+
+            override fun onHideCustomView() {
+                super.onHideCustomView()
+                // Teljes képernyős mód bezárása
+                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                supportActionBar?.show()
+            }
         }
 
         // WEBVIEW CLIENT - MINDEN VÉDELEMMEL
