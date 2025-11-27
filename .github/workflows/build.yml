@@ -3,8 +3,6 @@ name: Build Kotlin Project
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -14,27 +12,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Validate Gradle Wrapper
-      run: |
-        ls -la
-        ls -la gradle/wrapper/ || echo "Gradle wrapper not found"
-        ls -la app/ || echo "App directory not found"
-        
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '11'
-        cache: 'gradle'
         
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-      
+    - name: Create Gradle Wrapper
+      run: |
+        # Gradle wrapper létrehozása
+        gradle wrapper --gradle-version 7.5
+        
     - name: Build with Gradle
       run: ./gradlew build --no-daemon
-      
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-build
-        path: app/build/outputs/
