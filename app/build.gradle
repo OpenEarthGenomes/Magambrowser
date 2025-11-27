@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 36
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.magambrowser"
         minSdkVersion 21  // ✅ Több eszköz támogatás
